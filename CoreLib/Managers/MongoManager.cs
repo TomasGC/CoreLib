@@ -81,8 +81,9 @@ namespace CoreLib.Managers {
 
             // For some reasons the configuration of the client doesn't work without a connection string.
             #region MongoDB Atlas Cloud
-            string connectionString = $"MongoDB+srv://{mongoXDocReader.Login}:{mongoXDocReader.Password}@{mongoXDocReader.Hosts[0]}/{mongoXDocReader.DatabaseName}?retryWrites=true&w=majority&readPreference=primaryPreferred";
+            string connectionString = $"mongodb+srv://{mongoXDocReader.Login}:{mongoXDocReader.Password}@{mongoXDocReader.Hosts[0]}/{mongoXDocReader.DatabaseName}?retryWrites=true&w=majority&readPreference=primaryPreferred";
             client = new MongoClient(connectionString);
+            temporaryClient = new MongoClient(connectionString);
             #endregion
 
             #region MongoDB Server
@@ -102,15 +103,16 @@ namespace CoreLib.Managers {
             //    ServerSelectionTimeout = new TimeSpan(0, 0, serverSelectionTimeoutInSeconds),
             //    ConnectTimeout = new TimeSpan(0, 0, connectTimeoutInSeconds)
             //};
-			#endregion
+            //client = new MongoClient(settings);
+            //temporaryClient = new MongoClient(settings);
+            #endregion
 
-			databaseName = mongoXDocReader.DatabaseName;
+            databaseName = mongoXDocReader.DatabaseName;
             database = client.GetDatabase(databaseName);
             SerializerRegistry = database.Settings.SerializerRegistry;
 
             temporaryDatabaseType = mongoXDocReader.DatabaseType;
             temporaryDatabaseName = mongoXDocReader.DatabaseName;
-            temporaryClient = new MongoClient(settings);
 
             ConventionsRegister();
             ClassSerialization();
