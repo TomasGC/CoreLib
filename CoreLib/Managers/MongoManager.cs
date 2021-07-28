@@ -485,7 +485,7 @@ namespace CoreLib.Managers {
 		public static void Save<T>(T item, bool isNoIncrement = false, DatabaseEnvironment? databaseType = null) where T : BaseType {
             if (isNoIncrement && !ItemExists<T>(x => x._id == item._id))
                 AddItemInCollectionNoIncrement(item, databaseType);
-            if (item.isNew)
+            if (item.IsNew)
                 AddItemInCollection(item, databaseType);
             else
                 UpdateItem(item, databaseType);

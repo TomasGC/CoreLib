@@ -10,10 +10,16 @@ namespace CoreLib.Types {
     /// </summary>
     public class BaseType {
         #region Consts
+        /// <summary>
+        /// Logger.
+        /// </summary>
         [BsonIgnore]
         protected static readonly ILogger log = Log.ForContext(MethodBase.GetCurrentMethod().DeclaringType);
         #endregion
 
+        /// <summary>
+        /// Id of the object.
+        /// </summary>
         [BsonId]
         public ObjectId _id { get; set; } = ObjectId.Empty;
 
@@ -23,7 +29,7 @@ namespace CoreLib.Types {
         /// </summary>
         [BsonIgnore]
         [JsonIgnore]
-        public bool isNew { get { return _id == ObjectId.Empty; } }
+        public bool IsNew { get => _id == ObjectId.Empty; }
         #endregion
 
         /// <summary>
@@ -36,6 +42,9 @@ namespace CoreLib.Types {
     /// Used when we have to serialize properties in MongoDB.
     /// </summary>
     public abstract class SerializationBaseType : BaseType {
+        /// <summary>
+        /// Serialization abstract method.
+        /// </summary>
         public abstract void Serialization();
     };
 }
