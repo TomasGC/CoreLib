@@ -24,7 +24,7 @@ namespace CoreLib.Utils {
                     return;
                 }
 
-                MethodBase? method = stack.GetMethod();
+                MethodBase method = stack.GetMethod();
                 if (method != null && method.DeclaringType.Assembly != typeof(Log).Assembly) {
                     string caller = $"{method.DeclaringType.FullName}->{method.Name}():{stack.GetFileLineNumber()}";
                     logEvent.AddPropertyIfAbsent(new LogEventProperty("Caller", new ScalarValue(caller)));

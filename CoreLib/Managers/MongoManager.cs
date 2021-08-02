@@ -38,7 +38,6 @@ namespace CoreLib.Managers {
 
         static IMongoDatabase database;
         public static IBsonSerializerRegistry SerializerRegistry { get; private set; }
-        static MongoClientSettings settings;
         static MongoConfigParser mongoXDocReader;
 
         #region Original Database
@@ -114,12 +113,12 @@ namespace CoreLib.Managers {
             temporaryDatabaseType = mongoXDocReader.DatabaseType;
             temporaryDatabaseName = mongoXDocReader.DatabaseName;
 
+            aggregationPipelinesLoader.Configure(aggregationPipelineBasePath);
+
             ConventionsRegister();
             ClassSerialization();
 
             log.Information($"Database is: {databaseName}.");
-
-            aggregationPipelinesLoader.Configure(aggregationPipelineBasePath);
         }
 
         /// <summary>
@@ -137,9 +136,11 @@ namespace CoreLib.Managers {
         /// Setup the custom class serializations for MongoDB.
         /// </summary>
         static void ClassSerialization() {
+            List<Type> types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes().Where(y => y.IsClass && y.IsSealed && y.IsSubclassOf(typeof(SerializationBaseType)))).ToList();
             // This will loop over all the classes that inherit from SerializationBaseType.
             // x.IsClass && !x.IsAbstract are mandatory to avoid to have an exception, as abstract class aren't instanciable.
-            foreach (Type type in Assembly.GetAssembly(typeof(SerializationBaseType)).GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(SerializationBaseType)))) {
+            foreach (Type type in types) {
+                Console.WriteLine(type.FullName);
                 SerializationBaseType a = (SerializationBaseType)Activator.CreateInstance(type);
                 a.Serialization();
             }
