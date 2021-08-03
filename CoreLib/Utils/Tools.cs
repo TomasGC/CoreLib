@@ -130,10 +130,49 @@ namespace CoreLib.Utils {
             return object1.Equals(object2);
         }
 
-		/// <summary>
-		/// Return the current exact executable root path (folder where is located exe)
-		/// </summary>
-		/// <returns></returns>
-		public static string GetExecutableRootPath() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? Environment.CurrentDirectory : Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Substring(6); // Because path is like file:/C:\myfolder
+        /// <summary>
+        /// Compare 2 enumerables.
+        /// </summary>
+        /// <param name="enumerable1"></param>
+        /// <param name="enumerable2"></param>
+        public static bool SequenceEqual<T>(IEnumerable<T> enumerable1, IEnumerable<T> enumerable2) {
+            if (enumerable1 == null && enumerable2 != null)
+                return false;
+
+            if (enumerable1 != null && enumerable2 == null)
+                return false;
+
+            if (enumerable1 == null && enumerable2 == null)
+                return true;
+
+            if (enumerable1.Count() != enumerable2.Count())
+                return false;
+
+            return enumerable1.SequenceEqual(enumerable2) && enumerable2.SequenceEqual(enumerable1);
+        }
+
+        /// <summary>
+        /// Compare 2 dictionnaries.
+        /// </summary>
+        /// <param name="dictionnary1"></param>
+        /// <param name="dictionnary2"></param>
+        public static bool SequenceEqual<T, U>(Dictionary<T, U> dictionnary1, Dictionary<T, U> dictionnary2) {
+            if (dictionnary1 == null && dictionnary2 != null)
+                return false;
+
+            if (dictionnary1 != null && dictionnary2 == null)
+                return false;
+
+            if (dictionnary1 == null && dictionnary2 == null)
+                return true;
+
+            return dictionnary1.SequenceEqual(dictionnary2) && dictionnary2.SequenceEqual(dictionnary1);
+        }
+
+        /// <summary>
+        /// Return the current exact executable root path (folder where is located exe)
+        /// </summary>
+        /// <returns></returns>
+        public static string GetExecutableRootPath() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? Environment.CurrentDirectory : Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase).Substring(6); // Because path is like file:/C:\myfolder
 	};
 }
