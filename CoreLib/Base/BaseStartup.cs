@@ -55,6 +55,11 @@ namespace CoreLib.Base {
 	/// </summary>
 	public class BaseStartup {
 		/// <summary>
+		/// Data folder path.
+		/// </summary>
+		static readonly string dataPath = Path.Combine(Tools.GetExecutableRootPath(), "Data");
+
+		/// <summary>
 		/// Logger.
 		/// </summary>
 		protected static readonly ILogger log = Log.ForContext(MethodBase.GetCurrentMethod().DeclaringType);
@@ -131,26 +136,11 @@ namespace CoreLib.Base {
 		/// <param name="app"></param>
 		/// <param name="env"></param>
 		public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+			string aggregationPipelinesPath = Path.Combine(dataPath, "AggregationPipelines");
+			string configFilePath = Path.Combine(dataPath, "MongoDB", "MongoConfig.xml");
+			string credentialFilePath = Path.Combine(dataPath, "MongoDB", "MongoCredentials.xml");
 
-			string basePath = Path.Combine(Tools.GetExecutableRootPath(), @"Data");
-			string aggregationPipelineBasePath = string.Empty;
-			string configFilePath = string.Empty;
-			string credentialFilePath = string.Empty;
-
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-				log.Debug("Linux environment.");
-				aggregationPipelineBasePath = $"{basePath}/AggregationPipelines/";
-				configFilePath = $"{basePath}/MongoDB/MongoConfig.xml";
-				credentialFilePath = $"{basePath}/MongoDB/MongoCredentials.xml";
-			}
-			else {
-				log.Debug("Windows environment.");
-				aggregationPipelineBasePath = $@"{basePath}\AggregationPipelines\";
-				configFilePath = $@"{basePath}\MongoDB\MongoConfig.xml";
-				credentialFilePath = $@"{basePath}\MongoDB\MongoCredentials.xml";
-			}
-
-			MongoManager.Configure(aggregationPipelineBasePath, configFilePath, credentialFilePath);
+			MongoManager.Configure(aggregationPipelinesPath, configFilePath, credentialFilePath);
 
 			log.Information($"{BaseSettings.ApiName} started. Version = [{BaseSettings.ApiVersion}].");
 

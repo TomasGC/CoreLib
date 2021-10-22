@@ -99,7 +99,7 @@ namespace CoreLib.Utils {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="exceptions"></param>
-        public static List<T> GetListOfEnumValues<T>(List<T> exceptions = null) {
+        public static List<T> GetListOfEnumValues<T>(params T[] exceptions) {
             List<T> list = new List<T>();
 
             foreach (T value in Enum.GetValues(typeof(T))) {
@@ -135,7 +135,7 @@ namespace CoreLib.Utils {
         /// </summary>
         /// <param name="enumerable1"></param>
         /// <param name="enumerable2"></param>
-        public static bool SequenceEqual<T>(IEnumerable<T> enumerable1, IEnumerable<T> enumerable2) {
+        public static bool SequencesEqual<T>(IEnumerable<T> enumerable1, IEnumerable<T> enumerable2) {
             if (enumerable1 == null && enumerable2 != null)
                 return false;
 
@@ -168,6 +168,22 @@ namespace CoreLib.Utils {
 
             return dictionnary1.SequenceEqual(dictionnary2) && dictionnary2.SequenceEqual(dictionnary1);
         }
+
+        /// <summary>
+        /// Get hash code for IEnumerable fields.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        public static int GetHashCodeList<T>(IEnumerable<T> enumerable) => enumerable == null ? 0 : enumerable.Distinct().Aggregate(0, (x, y) => x.GetHashCode() ^ y.GetHashCode());
+
+        /// <summary>
+        /// Get hash code for nullable fields.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static int GetHashCode<T>(T obj) => obj == null ? 0 : obj.GetHashCode();
 
         /// <summary>
         /// Return the current exact executable root path (folder where is located exe)

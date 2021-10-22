@@ -16,13 +16,7 @@ namespace CoreLib.Base {
         /// </summary>
         /// <param name="appSettingsName"></param>
         /// <returns></returns>
-        public static IConfiguration SetupConfiguration(string appSettingsName) {
-            return new ConfigurationBuilder()
-            .SetBasePath(Tools.GetExecutableRootPath())
-            .AddJsonFile(appSettingsName, optional: false, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
-        }
+        public static IConfiguration SetupConfiguration(string appSettingsName) => new ConfigurationBuilder().SetBasePath(Tools.GetExecutableRootPath()).AddJsonFile(appSettingsName, false, true).AddEnvironmentVariables().Build();
 
         /// <summary>
         /// The host builder.
