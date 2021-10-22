@@ -1,3 +1,4 @@
+using CoreLib.Aggregations;
 using CoreLib.Base;
 using CoreLib.Managers;
 using CoreLib.Utils;
@@ -49,6 +50,7 @@ namespace CoreLibTest {
 
 			// Load json config.
 			ServiceCollection services = new ServiceCollection();
+			services.AddSingleton(configuration.GetSection("AppConfiguration:AggregationTypes").Get<AggregationTypes>());
 			services.AddSingleton(configuration.GetSection("AppConfiguration:Settings").Get<T>());
 
 			base.Initialize();
